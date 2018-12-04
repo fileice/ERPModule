@@ -1,0 +1,118 @@
+//
+//  cust2ViewController.swift
+//  ERP_Module_V1
+//
+//  Created by fileice on 2018/11/23.
+//  Copyright © 2018 fileice. All rights reserved.
+//
+
+import UIKit
+
+class cust2ViewController: UIViewController {
+    
+    let animals: [String] = ["NO", "Name", "Address", "Phome", "Mobile","Email","Note"]
+    var allCellsText = [String?](repeating: nil, count:7)
+    
+    
+    @IBOutlet weak var cust2Tableview: UITableView!
+    
+    var jsonPost:[String: Any] = [:]
+    var tableData = [String]()
+   
+    @IBAction func save_Click(_ sender: Any) {
+        
+        for (index, element) in animals.enumerated()
+        {
+            jsonPost[element] = allCellsText[index]
+        }
+        self.cust2Tableview.reloadData()
+        print(jsonPost)
+        
+    }
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableViewSetup()
+        // Do any additional setup after loading the view.
+    }
+    
+    //收鍵盤
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        UIView.animate(withDuration: 0.3) {
+            self.view.endEditing(true)
+        }
+    }
+
+}
+
+extension cust2ViewController : UITableViewDelegate,UITableViewDataSource, UITextFieldDelegate{
+    
+    func tableViewSetup(){
+        cust2Tableview.delegate = self
+        cust2Tableview.dataSource = self
+        cust2Tableview.tableFooterView = UIView()
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return animals.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cust2cell") as! cust2TableViewCell
+        cell.lblTitle.text = animals[indexPath.row]
+        cell.ansTextfield?.delegate = self
+        cell.ansTextfield?.text = ""
+        cell.ansTextfield?.placeholder = animals[indexPath.row]
+        cell.ansTextfield?.autocorrectionType = UITextAutocorrectionType.no
+        cell.ansTextfield?.autocapitalizationType = UITextAutocapitalizationType.none
+        cell.ansTextfield?.adjustsFontSizeToFitWidth = true;
+        
+        if indexPath.row == 0 {
+            if cell.ansTextfield.text == ""  {
+                print("111111")
+            }
+        }
+        
+        //var postJson:[String:Any] = [animals[indexPath.row]:cell.ansTextfield?.text! as Any]
+        
+        //jsonPost.updateValue(cell.ansTextfield.text! , forKey: animals[indexPath.row])
+        
+        return cell
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        
+
+        
+        let indexOf = animals.index(of:textField.placeholder!)
+
+
+        if(textField.placeholder! == animals[indexOf!]){
+
+            if( indexOf! <= (allCellsText.count - 1)){
+
+                allCellsText.remove(at: indexOf!)
+            }
+            allCellsText.insert((textField.text!), at: indexOf!)
+
+        }
+        
+    }
+    
+    //delegate method
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    
+        return true
+    }
+    
+ 
+    
+    
+    
+    
+    
+}
