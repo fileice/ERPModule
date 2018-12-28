@@ -119,7 +119,7 @@ extension CustomerViewController : UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // create post request
-            let url = URL(string: "http://13.230.101.163/api/Customer?c_ID=8")
+            let url = URL(string: "http://18.182.206.26/api/Customer?c_ID=8")
             var request = URLRequest(url: url! as URL)
             request.httpMethod = "DELETE"
             
