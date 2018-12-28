@@ -13,12 +13,11 @@ class cust2ViewController: UIViewController {
     let animals: [String] = ["NO", "Name", "Address", "Phome", "Mobile","Email","Note"]
     var allCellsText = [String?](repeating: nil, count:7)
     
-    
     @IBOutlet weak var cust2Tableview: UITableView!
     
     var jsonPost:[String: Any] = [:]
     var tableData = [String]()
-   
+    
     @IBAction func save_Click(_ sender: Any) {
         
         for (index, element) in animals.enumerated()
@@ -29,7 +28,6 @@ class cust2ViewController: UIViewController {
         print(jsonPost)
         
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,7 +41,6 @@ class cust2ViewController: UIViewController {
             self.view.endEditing(true)
         }
     }
-
 }
 
 extension cust2ViewController : UITableViewDelegate,UITableViewDataSource, UITextFieldDelegate{
@@ -60,7 +57,6 @@ extension cust2ViewController : UITableViewDelegate,UITableViewDataSource, UITex
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "cust2cell") as! cust2TableViewCell
         cell.lblTitle.text = animals[indexPath.row]
         cell.ansTextfield?.delegate = self
@@ -75,44 +71,36 @@ extension cust2ViewController : UITableViewDelegate,UITableViewDataSource, UITex
                 print("111111")
             }
         }
-        
-        //var postJson:[String:Any] = [animals[indexPath.row]:cell.ansTextfield?.text! as Any]
-        
-        //jsonPost.updateValue(cell.ansTextfield.text! , forKey: animals[indexPath.row])
-        
         return cell
     }
-
+    
+    //******** start textfield delegate potocol ***********//
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        
+    }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         
-
-        
+    }
+    
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         let indexOf = animals.index(of:textField.placeholder!)
-
-
+        
         if(textField.placeholder! == animals[indexOf!]){
-
             if( indexOf! <= (allCellsText.count - 1)){
-
+                
                 allCellsText.remove(at: indexOf!)
             }
             allCellsText.insert((textField.text!), at: indexOf!)
-
         }
-        
+        return true
     }
     
     //delegate method
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-    
+        
         return true
     }
-    
- 
-    
-    
-    
-    
     
 }
