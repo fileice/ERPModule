@@ -11,7 +11,7 @@ import UIKit
 class cust2ViewController: UIViewController {
     
     let animals: [String] = ["c_No", "c_Name", "c_Address", "c_Phone", "c_Mobile","c_Email","c_Note"]
-    var allCellsText = [String?](repeating: nil, count:7)
+    var allCellsText = [Any?](repeating: nil, count:7)
     
     @IBOutlet weak var cust2Tableview: UITableView!
     
@@ -19,6 +19,7 @@ class cust2ViewController: UIViewController {
     var tableData = [String]()
     
     @IBAction func save_Click(_ sender: Any) {
+        
         //宣告viewmodel
         let viewModel = ListViewModel()
         for (index, element) in animals.enumerated()
@@ -37,6 +38,7 @@ class cust2ViewController: UIViewController {
         super.viewDidLoad()
         tableViewSetup()
         // Do any additional setup after loading the view.
+        print(allCellsText)
     }
     
     //收鍵盤
@@ -64,7 +66,7 @@ extension cust2ViewController : UITableViewDelegate,UITableViewDataSource, UITex
         let cell = tableView.dequeueReusableCell(withIdentifier: "cust2cell") as! cust2TableViewCell
         cell.lblTitle.text = animals[indexPath.row]
         cell.ansTextfield?.delegate = self
-        cell.ansTextfield?.text = ""
+        cell.ansTextfield?.text = allCellsText[indexPath.row] as? String 
         cell.ansTextfield?.placeholder = animals[indexPath.row]
         cell.ansTextfield?.autocorrectionType = UITextAutocorrectionType.no
         cell.ansTextfield?.autocapitalizationType = UITextAutocapitalizationType.none

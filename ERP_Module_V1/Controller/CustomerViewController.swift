@@ -71,7 +71,8 @@ class CustomerViewController: UIViewController {
     
     @objc func refreshData(){
         viewModel.getListData()
-        DispatchQueue.main.async {
+        //下拉更新 增加秒數
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
             self.CustomertableView.reloadData()
             self.refreshControl.endRefreshing()
         }
@@ -175,6 +176,31 @@ extension CustomerViewController : UITableViewDelegate,UITableViewDataSource{
 //                self.tabBarController?.tabBar.isHidden = true
 //                self.navigationController?.pushViewController(vc, animated: true)
 //            }
+            self.CustomertableView.reloadData()
+
+            let cust2VC: cust2ViewController = self.storyboard?.instantiateViewController(withIdentifier: "cust2VC") as! cust2ViewController
+            cust2VC.title = "修改客戶"
+            
+            let c_ID = self.viewModel.arrayOfList[indexPath.row].c_ID!
+            let c_No = self.viewModel.arrayOfList[indexPath.row].c_No ?? ""
+            let c_Name = self.viewModel.arrayOfList[indexPath.row].c_Name ?? ""
+            let c_Address = self.viewModel.arrayOfList[indexPath.row].c_Address ?? ""
+            let c_Phone = self.viewModel.arrayOfList[indexPath.row].c_Phone ?? ""
+            let c_Mobile = self.viewModel.arrayOfList[indexPath.row].c_Mobile ?? ""
+            let c_Email = self.viewModel.arrayOfList[indexPath.row].c_Email ?? ""
+            let c_Note = self.viewModel.arrayOfList[indexPath.row].c_Note ?? ""
+
+            cust2VC.allCellsText.insert(c_ID,at: 7)
+            cust2VC.allCellsText.insert(c_No, at: 0)
+            cust2VC.allCellsText.insert(c_Name, at: 1)
+            cust2VC.allCellsText.insert(c_Address, at: 2)
+            cust2VC.allCellsText.insert(c_Phone, at: 3)
+            cust2VC.allCellsText.insert(c_Mobile, at: 4)
+            cust2VC.allCellsText.insert(c_Email, at: 5)
+            cust2VC.allCellsText.insert(c_Note, at: 6)
+            
+            print(cust2VC.allCellsText)
+            self.navigationController?.show(cust2VC, sender: nil)
         })
         putAction.backgroundColor = UIColor.blue
         return [deleteAction,putAction]
