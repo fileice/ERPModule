@@ -10,7 +10,7 @@ import UIKit
 
 class cust2ViewController: UIViewController {
     
-    let animals: [String] = ["NO", "Name", "Address", "Phome", "Mobile","Email","Note"]
+    let animals: [String] = ["c_No", "c_Name", "c_Address", "c_Phone", "c_Mobile","c_Email","c_Note"]
     var allCellsText = [String?](repeating: nil, count:7)
     
     @IBOutlet weak var cust2Tableview: UITableView!
@@ -19,13 +19,17 @@ class cust2ViewController: UIViewController {
     var tableData = [String]()
     
     @IBAction func save_Click(_ sender: Any) {
-        
+        //宣告viewmodel
+        let viewModel = ListViewModel()
         for (index, element) in animals.enumerated()
         {
             jsonPost[element] = allCellsText[index]
         }
+        
         self.cust2Tableview.reloadData()
         print(jsonPost)
+        viewModel.postListData(json: jsonPost)
+        self.navigationController?.popViewController(animated: true)
         
     }
     

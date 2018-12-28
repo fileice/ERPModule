@@ -28,9 +28,11 @@ class ListViewModel {
         guard let listURL = URL(string: customer_URL.customer_url)else {
             return
         }
+        
         URLSession.shared.dataTask(with: listURL){
             (data,response,error) in
             guard let jsonData = data else { return }
+
             do {
                 ///Using Decodable data parse
                 let decoder = JSONDecoder()
@@ -43,6 +45,7 @@ class ListViewModel {
     }
     
 
+    //上傳
     func postListData(json:[String: Any]){
        
         // create post request
@@ -73,7 +76,59 @@ class ListViewModel {
         dataTask.resume()
     }
     
+    //update
+    func putListData(json:[String:Any]){
+        let url = URL(string: customer_URL.customer_url)!
+        let config = URLSessionConfiguration.default
+        let session = URLSession(configuration:config, delegate: nil, delegateQueue: nil)
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "PUT"
+        request.addValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
+        print(json)
+        guard let httpbody = try? JSONSerialization.data(withJSONObject: json, options: []) else { return }
+        request.httpBody = httpbody
+        
+        let dataTask = session.dataTask(with: request, completionHandler: {(data: Data?, response: URLResponse?, error: Error?) -> Void in
+            if let response = response{
+                print(response)
+            }
+            if let data = data{
+                do{
+                    let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String:Any]
+                    print(json)
+                }catch{
+                    print(error)
+                }
+            }
+        })
+        dataTask.resume()
+    }
     
+    //刪除資料
+    func deleteListData(id: Int){
+
+        let url = URL(string: "\(customer_URL.customer_del_URL)\(id)")!
+        let config = URLSessionConfiguration.default
+        let session = URLSession(configuration:config, delegate: nil, delegateQueue: nil)
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "DELETE"
+        request.addValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
+        
+        let dataTask = session.dataTask(with: request, completionHandler: {(data: Data?, response: URLResponse?, error: Error?) -> Void in
+            if let response = response{
+                print(response)
+            }
+            print("Error:")
+            print(error as Any)
+            print("response:")
+            print(response as Any)
+            print("data:")
+            print(data as Any)
+        })
+        dataTask.resume()
+    }
     
     
 }

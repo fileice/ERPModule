@@ -13,6 +13,10 @@ class CustomerViewController: UIViewController {
     @IBOutlet weak var CustomertableView: UITableView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
+    //下拉更新
+    var refreshControl = UIRefreshControl()
+
+    
     @IBAction func AddCuatomerVC(_ sender: Any) {
         let Add_C_VC: AddCustomerViewController = self.storyboard?.instantiateViewController(withIdentifier: "Add_C_VC") as! AddCustomerViewController
         Add_C_VC.title = "新增客戶"
@@ -64,6 +68,14 @@ class CustomerViewController: UIViewController {
             }
         }
     }
+    
+    @objc func refreshData(){
+        viewModel.getListData()
+        DispatchQueue.main.async {
+            self.CustomertableView.reloadData()
+            self.refreshControl.endRefreshing()
+        }
+    }
 }
 
 ///UITable view delegate methods
@@ -73,6 +85,19 @@ extension CustomerViewController : UITableViewDelegate,UITableViewDataSource{
         CustomertableView.dataSource = self
         CustomertableView.delegate = self
         CustomertableView.tableFooterView = UIView()
+        
+        //修改文字顯示顏色
+        let attributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+        //加入更新程式碼
+        self.refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        //顯示文字內容
+        self.refreshControl.attributedTitle = NSAttributedString(string: "更新中...", attributes: attributes)
+        //設定元件顏色
+        self.refreshControl.tintColor = UIColor.black
+        //設定背景顏色
+        self.refreshControl.backgroundColor = UIColor.white
+        //將元件加入Tableview中
+        self.CustomertableView.refreshControl = refreshControl
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.arrayOfList.count
@@ -117,27 +142,42 @@ extension CustomerViewController : UITableViewDelegate,UITableViewDataSource{
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // create post request
-            let url = URL(string: "http://18.182.206.26/api/Customer?c_ID=8")
-            var request = URLRequest(url: url! as URL)
-            request.httpMethod = "DELETE"
-            
-            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-                if error != nil { print(error!); return }
-                do {
-                    if let jsonObj = String(data: data!, encoding: .utf8) {
-                        print(jsonObj)
-                        DispatchQueue.main.async {
-                            self.CustomertableView.reloadData()
-                        }
-                    }
-                } catch {
-                    print(error)
-                }
-            }
-            task.resume()
-        }
+      
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        // 彈跳視窗
+        let deleteAction = UITableViewRowAction(style: .default, title: "刪除", handler: {(action, indexPath) -> Void in
+            let  delalert = UIAlertController(title: "確定刪除", message: "", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+            let okAction = UIAlertAction(title: "確認",style: .destructive,handler: {
+                (action: UIAlertAction!) -> Void in
+                self.viewModel.deleteListData(id: self.viewModel.arrayOfList[indexPath.row].c_ID!)
+                self.viewModel.arrayOfList.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .bottom)
+            })
+            delalert.addAction(cancelAction)
+            delalert.addAction(okAction)
+            self.present(delalert, animated: true, completion: nil)
+        })
+        let putAction = UITableViewRowAction(style: .default, title: "修改", handler:{(action,indexPath) -> Void in
+//            let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+//            if let vc = mainStoryboard.instantiateViewController(withIdentifier: "PutView") as? C_PutViewController
+//            {
+//                vc.c_ID = self.viewModel.arrayOfList[indexPath.row].c_ID!
+//                vc.c_No = self.viewModel.arrayOfList[indexPath.row].c_No ?? ""
+//                vc.c_Name = self.viewModel.arrayOfList[indexPath.row].c_Name ?? ""
+//                vc.c_Address = self.viewModel.arrayOfList[indexPath.row].c_Address ?? ""
+//                vc.c_Phone = self.viewModel.arrayOfList[indexPath.row].c_Phone ?? ""
+//                vc.c_Mobile = self.viewModel.arrayOfList[indexPath.row].c_Mobile ?? ""
+//                vc.c_Email = self.viewModel.arrayOfList[indexPath.row].c_Email ?? ""
+//                vc.c_Note = self.viewModel.arrayOfList[indexPath.row].c_Note ?? ""
+//                self.tabBarController?.tabBar.isHidden = true
+//                self.navigationController?.pushViewController(vc, animated: true)
+//            }
+        })
+        putAction.backgroundColor = UIColor.blue
+        return [deleteAction,putAction]
     }
     
     /////////////

@@ -26,6 +26,7 @@ class AddCustomerViewController: UIViewController, UITextFieldDelegate{
             // prepare json data
             let json: [String: Any] = ["c_No":c_NO_Textfiled.text!,"c_Name":c_Name_Textfield.text!,"c_Address":c_Address_Textfiled.text!,"c_Phone":c_Phone_Textfield.text!,"c_Mobile":c_Mobile_Textfield.text!,"c_Email":c_Email_Textfield.text!,"c_Note":c_Note_Textfield.text!]
 
+            print(json)
             viewModel.postListData(json: json)
             self.navigationController?.popViewController(animated: true)
             
