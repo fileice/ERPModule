@@ -20,7 +20,9 @@ class ListViewModel {
         ///Reload data when data set
         didSet{
             reloadList()
+            getListData()
         }
+        
     }
     
     ///get data from api (https://jsonplaceholder.typicode.com/posts/)

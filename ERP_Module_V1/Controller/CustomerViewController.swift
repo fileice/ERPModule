@@ -162,20 +162,7 @@ extension CustomerViewController : UITableViewDelegate,UITableViewDataSource{
             self.present(delalert, animated: true, completion: nil)
         })
         let putAction = UITableViewRowAction(style: .default, title: "修改", handler:{(action,indexPath) -> Void in
-//            let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-//            if let vc = mainStoryboard.instantiateViewController(withIdentifier: "PutView") as? C_PutViewController
-//            {
-//                vc.c_ID = self.viewModel.arrayOfList[indexPath.row].c_ID!
-//                vc.c_No = self.viewModel.arrayOfList[indexPath.row].c_No ?? ""
-//                vc.c_Name = self.viewModel.arrayOfList[indexPath.row].c_Name ?? ""
-//                vc.c_Address = self.viewModel.arrayOfList[indexPath.row].c_Address ?? ""
-//                vc.c_Phone = self.viewModel.arrayOfList[indexPath.row].c_Phone ?? ""
-//                vc.c_Mobile = self.viewModel.arrayOfList[indexPath.row].c_Mobile ?? ""
-//                vc.c_Email = self.viewModel.arrayOfList[indexPath.row].c_Email ?? ""
-//                vc.c_Note = self.viewModel.arrayOfList[indexPath.row].c_Note ?? ""
-//                self.tabBarController?.tabBar.isHidden = true
-//                self.navigationController?.pushViewController(vc, animated: true)
-//            }
+
             self.CustomertableView.reloadData()
 
             let cust2VC: cust2ViewController = self.storyboard?.instantiateViewController(withIdentifier: "cust2VC") as! cust2ViewController
@@ -201,6 +188,7 @@ extension CustomerViewController : UITableViewDelegate,UITableViewDataSource{
             
             print(cust2VC.allCellsText)
             self.navigationController?.show(cust2VC, sender: nil)
+            
         })
         putAction.backgroundColor = UIColor.blue
         return [deleteAction,putAction]

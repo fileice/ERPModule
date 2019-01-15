@@ -10,7 +10,7 @@ import UIKit
 
 class cust2ViewController: UIViewController {
     
-    let animals: [String] = ["c_No", "c_Name", "c_Address", "c_Phone", "c_Mobile","c_Email","c_Note"]
+    var animals: [String] = ["c_No", "c_Name", "c_Address", "c_Phone", "c_Mobile","c_Email","c_Note"]
     var allCellsText = [Any?](repeating: nil, count:7)
     
     @IBOutlet weak var cust2Tableview: UITableView!
@@ -20,16 +20,21 @@ class cust2ViewController: UIViewController {
     
     @IBAction func save_Click(_ sender: Any) {
         
-        //宣告viewmodel
-        let viewModel = ListViewModel()
-        for (index, element) in animals.enumerated()
-        {
-            jsonPost[element] = allCellsText[index]
+        if self.title == "修改客戶" {
+            print("修改客戶")
+        } else {
+            
+            //宣告viewmodel
+            let viewModel = ListViewModel()
+            for (index, element) in animals.enumerated()
+            {
+                jsonPost[element] = allCellsText[index]
+            }
+            
+            print(jsonPost)
+            viewModel.postListData(json: jsonPost)
         }
-        
-        self.cust2Tableview.reloadData()
-        print(jsonPost)
-        viewModel.postListData(json: jsonPost)
+
         self.navigationController?.popViewController(animated: true)
         
     }
@@ -74,9 +79,10 @@ extension cust2ViewController : UITableViewDelegate,UITableViewDataSource, UITex
         
         if indexPath.row == 0 {
             if cell.ansTextfield.text == ""  {
-                print("111111")
+                print("00000000")
             }
         }
+        
         return cell
     }
     
@@ -97,6 +103,7 @@ extension cust2ViewController : UITableViewDelegate,UITableViewDataSource, UITex
                 
                 allCellsText.remove(at: indexOf!)
             }
+
             allCellsText.insert((textField.text!), at: indexOf!)
         }
         return true

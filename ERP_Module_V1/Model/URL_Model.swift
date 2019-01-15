@@ -9,8 +9,8 @@
 import Foundation
 
 class json_URL: Codable{
-    var customer_url = "http://13.230.101.163/api/Customer"
-    var customer_del_URL = "http://13.230.101.163/api/Customer?c_ID="
+    var customer_url = "http://52.198.240.49/api/Customer"
+    var customer_del_URL = "http://52.198.240.49/api/Customer?c_ID="
 
-    var product_url = "http://13.230.101.163/api/Product"
+    var product_url = "http://52.198.240.49/api/Product"
 }
